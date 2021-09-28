@@ -1,0 +1,12 @@
+-- Deleting rows where bikes were being serviced. 4 rows dropped
+DELETE FROM td_2021
+WHERE start_station_name = 'DIVVY CASSETTE REPAIR MOBILE STATION';
+
+-- Deleting more rows where bikes were being tested
+DELETE FROM td_2021
+WHERE start_station_name = 'WATSON TESTING - DIVVY';
+
+-- Deleting dirty data where start time was after end time (as long as 20 days). 37,441 rows deleted.
+DELETE FROM td_2021
+WHERE start_station_name = 'WATSON TESTING - DIVVY';
+
