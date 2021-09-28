@@ -1,0 +1,24 @@
+-- Finding the average ride length for bike rides in months 09/2020-08/2021
+SELECT AVG(ride_length) FROM td_2021
+-- 23:30 minutes
+
+-- Finding the median ride length for bike rides in months 09/2020-08/2021
+SELECT PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY ride_length) FROM td_2021;
+-- 13:00 minutes
+
+-- Finding the max bike ride length
+SELECT MAX(ride_length) FROM td_2021
+--38 days, 20 hours 24 minutes
+
+-- Finidng the min bike ride length
+SELECT min(ride_length) FROM td_2021
+-- 1:00 minute
+
+SELECT MODE() 
+	WITHIN GROUP (ORDER BY ride_length)
+FROM td_2021
+
+SELECT COUNT(ride_length)
+FROM td_2021
+WHERE ride_length = '00:07:00'
+
