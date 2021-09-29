@@ -1,3 +1,16 @@
+-- Counting total number of trips by month (Least: Feb, Jan; Greatest: Jul, Aug)
+SELECT DATE_TRUNC('month', started_at) AS month, COUNT(*);
+FROM td_2021
+GROUP BY month
+ORDER BY COUNT(*) DESC;
+
+/* Counting number of trips by month grouped by type of rider
+Count of members usually greater casual riders except in summer months (Jun-Aug) 
+where we see an increase in casual riders */
+SELECT member_casual, DATE_TRUNC('month', started_at) as month, COUNT(*)
+FROM td_2021
+GROUP BY month, member_casual;
+
 -- Finding the average ride length for bike rides in months 09/2020-08/2021. -- 23:30 minutes
 SELECT AVG(ride_length) FROM td_2021
 
@@ -5,6 +18,11 @@ SELECT AVG(ride_length) FROM td_2021
 SELECT AVG(ride_length), DATE_TRUNC('month', started_at) AS month
 FROM td_2021
 GROUP BY DATE_TRUNC('month', started_at);
+
+-- Finding the average length of each bike ride for each month grouped by type of rider
+SELECT member_casual, AVG(ride_length), DATE_TRUNC('month', started_at) AS month
+FROM td_2021
+GROUP BY DATE_TRUNC('month', started_at), member_casual;
 
 -- Finding the median ride length for bike rides in months 09/2020-08/2021. -- 13:00 minutes
 SELECT PERCENTILE_CONT(0.5) WITHIN GROUP (ORDER BY ride_length) FROM td_2021;
@@ -44,8 +62,7 @@ SELECT member_casual, day_of_week, COUNT(*) FROM td_2021
 GROUP BY member_casual, day_of_week
 ORDER BY day_of_week;
 
--- Calculating average ride length by type of member
--- Calc average ride_length for members and casual riders
+-- Calculating average ride length by type of rider
 SELECT member_casual, AVG(ride_length) AS avg_ride_length
 FROM td_2021
 GROUP BY member_casual;
