@@ -125,10 +125,9 @@ FROM td_2021
 GROUP BY member_casual, hour_of_ride
 ORDER BY member_casual, COUNT(*) DESC
 
--- Adding type of bikes to the mix (from query above
-/* 
+/* Adding type of bikes to the mix (from query above)
 casual riders: ride more in afternoon hours and ride classic bikes more
-member riders: same findings/* 
+member riders: same findings */
 SELECT member_casual, rideable_type, EXTRACT(hour FROM started_at) as hour_of_ride, COUNT(*)
 FROM td_2021
 GROUP BY member_casual, hour_of_ride, rideable_type
