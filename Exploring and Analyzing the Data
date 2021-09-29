@@ -1,3 +1,8 @@
+-- Calculating percentage of rides by type or user (casual or member)
+SELECT member_casual, ROUND((COUNT(*) * 100.00) / (SELECT COUNT(*) FROM td_2021), 2)
+FROM td_2021
+GROUP BY member_casual
+
 -- Counting total number of trips by month (Least: Feb, Jan; Greatest: Jul, Aug)
 SELECT DATE_TRUNC('month', started_at) AS month, COUNT(*);
 FROM td_2021
@@ -48,6 +53,11 @@ SELECT MODE()
 	WITHIN GROUP (ORDER BY day_of_week)
 FROM td_2021
 
+-- Most popular days for bike riding with avg ride lengths
+SELECT member_casual, day_of_week, COUNT(*), AVG(ride_length) FROM td_2021
+GROUP BY member_casual, day_of_week
+ORDER BY day_of_week
+
 -- Most popular days for bike riding DESC (Sat, Sun, Fri,...)
 SELECT day_of_week, COUNT(*) FROM td_2021
 GROUP BY day_of_week
@@ -72,5 +82,56 @@ SELECT member_casual, day_of_week, AVG(ride_length) AS avg_ride_length
 FROM td_2021
 GROUP BY day_of_week, member_casual
 ORDER BY day_of_week
+
+-- Selecting most common trip made (Streeter Dr & Grand to Streeter Dr & Grand Ave)
+SELECT MODE() WITHIN GROUP
+	(ORDER BY trip_made)
+FROM (SELECT CONCAT(start_station_name, ' to ', end_station_name) AS trip_made FROM td_2021) a
+
+-- Selecting top ten most common trips made by casual riders with count of rides, and average ride length
+-- All top ten trips > 30 min, 2 over 1 hr in ride length
+SELECT member_casual, trip_made, COUNT(trip_made), AVG(ride_length)
+FROM (
+	SELECT *, CONCAT(start_station_name, ' to ', end_station_name) AS trip_made FROM td_2021
+	) A
+WHERE member_casual = 'casual'
+GROUP BY member_casual, trip_made
+ORDER BY COUNT(trip_made) DESC
+LIMIT 10
+
+-- Selecting top ten most common trips made by annual/member riders with count of rides, and average ride length
+-- Parking garage to law school area. Most trips (9/10) have an average ride_length of <10min. 
+SELECT member_casual, trip_made, COUNT(trip_made), AVG(ride_length)
+FROM (
+	SELECT *, CONCAT(start_station_name, ' to ', end_station_name) AS trip_made FROM td_2021
+	) A
+WHERE member_casual = 'member'
+GROUP BY member_casual, trip_made
+ORDER BY COUNT(trip_made) DESC
+LIMIT 10
+
+-- Most popular hours for using bike sharing service
+--Breaking down rides by the hour
+SELECT EXTRACT(hour FROM started_at) as hour_of_ride, COUNT(*)
+FROM td_2021
+GROUP BY hour_of_ride
+ORDER BY COUNT(*) DESC;
+
+--Breaking down count of rides by the hour and type of rider
+/* Most popular hours are between 4p-6p for both members & casual riders
+and least popular hours are between 2a-5a for both types of riders */
+SELECT member_casual, EXTRACT(hour FROM started_at) as hour_of_ride, COUNT(*)
+FROM td_2021
+GROUP BY member_casual, hour_of_ride
+ORDER BY member_casual, COUNT(*) DESC
+
+-- Adding type of bikes to the mix (from query above
+/* 
+casual riders: ride more in afternoon hours and ride classic bikes more
+member riders: same findings/* 
+SELECT member_casual, rideable_type, EXTRACT(hour FROM started_at) as hour_of_ride, COUNT(*)
+FROM td_2021
+GROUP BY member_casual, hour_of_ride, rideable_type
+ORDER BY member_casual, COUNT(*) DESC
 
 
