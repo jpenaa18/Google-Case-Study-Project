@@ -4,8 +4,8 @@ Keywords used: SELECT, DISTINCT, GROUP BY, WHERE, CASE, UPDATE, ALTER, CREATE, D
 
 -- Because I'll be deleting rows, I will make a copy of our table. A csv of the file also exists
 SELECT * 
-INTO "202008_tripdata_copy"
-FROM "202008_tripdata";
+INTO "202009_tripdata_copy"
+FROM "202009_tripdata";
 
 -- Looking for inconsistencies in ride_id. Given it's a unique key, they should all be the same character length
 -- The query below yielded 3 different character lengths for ride_id: 8, 9, 16
