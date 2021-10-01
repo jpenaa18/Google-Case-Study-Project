@@ -1,3 +1,6 @@
+/* Keywords used: DELETE, WHERE, UPDATE, CASE */
+----------------------------------------------------------------------------------------------------
+
 -- Deleting rows where bikes were being serviced. 4 rows dropped
 DELETE FROM td_2021
 WHERE start_station_name = 'DIVVY CASSETTE REPAIR MOBILE STATION';
