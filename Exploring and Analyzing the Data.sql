@@ -12,8 +12,8 @@ FROM td_2021
 GROUP BY month
 ORDER BY COUNT(*) DESC;
 
-/* Counting number of trips by month grouped by type of rider
-Count of members usually greater casual riders except in summer months (Jun-Aug) 
+/* Counting number of trips by month grouped by ridery type
+Rider type "member" is usually greater than casual riders except in summer months (Jun-Aug) 
 where we see an increase in casual riders */
 SELECT member_casual, DATE_TRUNC('month', started_at) as month, COUNT(*)
 FROM td_2021
@@ -27,7 +27,7 @@ SELECT AVG(ride_length), DATE_TRUNC('month', started_at) AS month
 FROM td_2021
 GROUP BY DATE_TRUNC('month', started_at);
 
--- Finding the average length of each bike ride for each month grouped by type of rider
+-- Finding the average length of each bike ride for each month grouped by rider type
 SELECT member_casual, AVG(ride_length), DATE_TRUNC('month', started_at) AS month
 FROM td_2021
 GROUP BY DATE_TRUNC('month', started_at), member_casual;
@@ -51,13 +51,13 @@ SELECT COUNT(ride_length)
 FROM td_2021
 WHERE ride_length = '00:07:00';
 
--- Calc mode day of the week. Result: 7 (Saturday)
+-- Calc mode day of the week. Result: (Saturday)
 SELECT MODE()
 	WITHIN GROUP (ORDER BY day_of_week)
 FROM td_2021
 
 -- Most popular days for bike riding with avg ride lengths
-SELECT member_casual, day_of_week, COUNT(*), AVG(ride_length) FROM td_2021
+SELECT member_casual, day_of_week, COUNT(*), AVG(ride_length) AS avg_ride_length FROM td_2021
 GROUP BY member_casual, day_of_week
 ORDER BY day_of_week
 
@@ -66,21 +66,21 @@ SELECT day_of_week, COUNT(*) FROM td_2021
 GROUP BY day_of_week
 ORDER BY COUNT(*) DESC
 
--- Count of trips made by casual riders and annual (member) riders. 
+-- Count of trips over 12 months made by rider type 
 SELECT member_casual, COUNT(*) FROM td_2021
 GROUP BY member_casual;
 
--- Count of trips made. Grouped by type of rider and day of week
+-- Count of trips made over 12 months. Grouped by rider type and day of week
 SELECT member_casual, day_of_week, COUNT(*) FROM td_2021
 GROUP BY member_casual, day_of_week
 ORDER BY day_of_week;
 
--- Calculating average ride length by type of rider
+-- Calculating average ride length by rider_type
 SELECT member_casual, AVG(ride_length) AS avg_ride_length
 FROM td_2021
 GROUP BY member_casual;
 
--- Calc the average ride length for users by day of week (casual riders use for much longer than members)
+-- Calc the average ride length for rider type by day of week (casual riders ride for much longer than members)
 SELECT member_casual, day_of_week, AVG(ride_length) AS avg_ride_length
 FROM td_2021
 GROUP BY day_of_week, member_casual
@@ -92,7 +92,7 @@ SELECT MODE() WITHIN GROUP
 FROM (SELECT CONCAT(start_station_name, ' to ', end_station_name) AS trip_made FROM td_2021) a
 
 -- Selecting top ten most common trips made by casual riders with count of rides, and average ride length
--- All top ten trips > 30 min, 2 over 1 hr in ride length
+-- All top ten trips > 30 min, 2 are over 1 hr in ride length
 SELECT member_casual, trip_made, COUNT(trip_made), AVG(ride_length)
 FROM (
 	SELECT *, CONCAT(start_station_name, ' to ', end_station_name) AS trip_made FROM td_2021
