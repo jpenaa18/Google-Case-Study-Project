@@ -1,3 +1,7 @@
+
+/* Data cleaning in PostgreSQL. Keywords used: SELECT, DISTINCT, GROUP BY, WHERE, CASE, UPDATE, ALTER, CREATE, DATE_PART */
+-------------------------------------------------------------------------------------------------------------------
+
 -- CREATING A COPY OF TABLE AS WE'LL BE DELETING INFORMATION AS PART OF THE CLEANING PROCESS
 SELECT * 
 INTO "202010_tripdata_copy"
