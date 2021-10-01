@@ -1,5 +1,10 @@
--- Selecting all data from table
-SELECT * FROM "202105_tripdata"
+
+/* Data cleaning in PostgreSQL. Keywords used: SELECT, DISTINCT, GROUP BY, WHERE, CASE, UPDATE, ALTER, CREATE, DATE_PART */
+-------------------------------------------------------------------------------------------------------------------
+
+-- Previewing the data
+SELECT * FROM "202105_tripdata
+LIMIT 1000
 
 -- Because I'll be deleting rows, I will make a copy of our table. A csv of the file also exists
 SELECT * 
