@@ -3,7 +3,7 @@
 -------------------------------------------------------------------------------------------------------------------
 
 -- Previewing the data
-SELECT * FROM "202105_tripdata
+SELECT * FROM "202105_tripdata"
 LIMIT 1000
 
 -- Because I'll be deleting rows, I will make a copy of our table. A csv of the file also exists
