@@ -1,9 +1,12 @@
+/* Data cleaning in PostgreSQL. Keywords used: SELECT, DISTINCT, GROUP BY, WHERE, CASE, UPDATE, ALTER, CREATE */
+-------------------------------------------------------------------------------------------------------------------
 -- Because I'll be deleting rows, I will make a copy of our table. A csv of the file also exists
 SELECT * 
 INTO "202012_tripdata_copy"
 FROM "202012_tripdata";
 
--- Looking at the different counts in ride_id. Ride id's are unique. This query yielded 5 distinct lengths with length of 16 making up almost all (all except < 100) 
+-- Looking at the different counts in ride_id. Ride id's are unique. 
+-- This query yielded 5 distinct lengths with length of 16 being the most common. (all except < 100 rows) 
 SELECT COUNT(ride_id), LENGTH(ride_id) 
 FROM "202012_tripdata"
 GROUP BY LENGTH(ride_id);
@@ -16,11 +19,11 @@ WHERE LENGTH(ride_id) != 16;
 DELETE FROM "202012_tripdata" 
 WHERE LENGTH(ride_id) != 16
 
--- Looking at distinct values in rideable_type. yields: electric_bike, docked_bike, classic_bike
+-- Looking at distinct values in rideable_type. (yields: electric_bike, docked_bike, classic_bike)
 SELECT DISTINCT(rideable_type)
 FROM "202012_tripdata";
 
--- Cleaning the data in rideable type
+-- Cleaning the data in rideable type using a CASE statement
 UPDATE "202012_tripdata"
 SET rideable_type = CASE 
 	WHEN rideable_type = 'docked_bike' THEN 'docked bike'
@@ -28,15 +31,10 @@ SET rideable_type = CASE
 	WHEN rideable_type = 'classic_bike' THEN 'classic bike'
 	END;
   
-   -- Seeing if we could find start_station_name from start_station_id. 0 Rows returned 
+-- Seeing if we could find start_station_name from start_station_id to avoid deleting those rows. 0 Rows returned 
  SELECT * FROM "202012_tripdata"
  WHERE end_station_name ISNULL
  AND end_station_id IS NOT NULL
- 
-  -- Seeing if we could find start_station_name from start_station_id. 0 rows returned 
- SELECT * FROM "202012_tripdata"
- WHERE end_station_name ISNULL
- AND end_station_id IS NOT NULL;
  
  -- Selecting data that has null values. 17,647 rows returned
 SELECT COUNT(*) FROM "202012_tripdata" 
@@ -56,16 +54,16 @@ OR end_station_id ISNULL;
 SELECT DISTINCT(member_casual)
 FROM "202012_tripdata";
 
--- ADDING DAY OF THE WEEK COLUMN 
+-- Adding the day of the week column
 ALTER TABLE "202012_tripdata"
 ADD day_of_week INT
 
--- INSERTING VALUES INTO DAY_OF_WEEK COLUMN WHERE SUNDAY = 1 AND SATURDAY = 7
+-- Inserting values into day_of_week column where Sunday = 1, and Saturday = 7
 UPDATE "202012_tripdata"
-SET day_of_week = (SELECT date_part('dow', started_at)+1
+SET day_of_week = (SELECT date_part('dow', started_at) +1
 WHERE started_at IS NOT NULL);
 
--- Creating new table with the same data but now a calculated field for ride length (end time - start time)
+-- Creating new table with the same data but now a calculated field for ride_length (end time - start time)
 CREATE TABLE "202012_td"
 AS
 SELECT *, ended_at - started_at AS ride_length
