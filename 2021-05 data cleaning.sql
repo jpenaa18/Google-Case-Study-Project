@@ -1,4 +1,3 @@
-
 /* Data cleaning in PostgreSQL. Keywords used: SELECT, DISTINCT, GROUP BY, WHERE, CASE, UPDATE, ALTER, CREATE, DATE_PART */
 -------------------------------------------------------------------------------------------------------------------
 
