@@ -1,3 +1,6 @@
+/* Types of queries and keywords: Data aggregation, window functions, date functions,
+   descriptive analysis. */
+
 -- Calculating percentage of rides by type or user (casual or member)
 SELECT member_casual, ROUND((COUNT(*) * 100.00) / (SELECT COUNT(*) FROM td_2021), 2)
 FROM td_2021
