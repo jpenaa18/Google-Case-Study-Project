@@ -1,11 +1,17 @@
--- Cleaning the September Dataset; 532,958 ROWS
--- There are 13 columns beginning with ride_id which appears to be a unique id for each bike ride
+/* Cleaning the September Dataset (532,958 rows) using PostgreSQL.
+There are 13 columns beginning with ride_id is a unique id for each bike ride
+Keywords used: SELECT, DISTINCT, GROUP BY, WHERE, CASE, UPDATE, ALTER, CREATE, DATE_PART */
+
+-- Because I'll be deleting rows, I will make a copy of our table. A csv of the file also exists
+SELECT * 
+INTO "202008_tripdata_copy"
+FROM "202008_tripdata";
 
 -- Looking for inconsistencies in ride_id. Given it's a unique key, they should all be the same character length
+-- The query below yielded 3 different character lengths for ride_id: 8, 9, 16
 SELECT DISTINCT(LENGTH(ride_id))
 FROM "202009_tripdata"
 
--- There were 3 different character lengths for ride_id: 8, 9, 16
 -- Looking at data where ride_id = 8 characters in length; 360 rows returned
 SELECT ride_id 
 FROM "202009_tripdata"
@@ -21,11 +27,6 @@ WHERE LENGTH(ride_id) = 8;
 SELECT ride_id 
 FROM "202009_tripdata"
 WHERE LENGTH(ride_id) = 16;
-
--- Because I'll be deleting rows, I will make a copy of our table. A csv of the file also exists
-SELECT * 
-INTO "202009_tripdata_copy"
-FROM "202009_tripdata";
 
 -- Dropping rows where ride_id != 16
 DELETE FROM "202009_tripdata" 
@@ -52,6 +53,7 @@ WHERE start_station_name IS NULL;
 -- DELETING NULL VALUES IN START_STATION_ID; 210 ROWS 
 DELETE FROM "202009_tripdata"
 WHERE start_station_id ISNULL;
+
 -- DELEETING NULL VALUES IN END_STATION_NAME AND END_STATION_ID; 12663 rows affected
 DELETE FROM "202009_tripdata"
 WHERE end_station_name ISNULL
