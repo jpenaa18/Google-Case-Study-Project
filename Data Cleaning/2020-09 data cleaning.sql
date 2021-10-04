@@ -1,5 +1,5 @@
 /* Cleaning the September Dataset (532,958 rows) using PostgreSQL.
-There are 13 columns beginning with ride_id is a unique id for each bike ride
+There are 13 columns.
 Keywords used: SELECT, DISTINCT, GROUP BY, WHERE, CASE, UPDATE, ALTER, CREATE, DATE_PART */
 
 -- Because I'll be deleting rows, I will make a copy of our table. A csv of the file also exists
